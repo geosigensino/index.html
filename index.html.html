@@ -334,6 +334,53 @@
       return d.toLocaleString("pt-BR");
     }
 
+    // checar se passou de 24 horas
+    function isExpired(createdAt) {
+      const created = new Date(createdAt);
+      if (isNaN(created)) return false;
+      const now = new Date();
+      const diffMs = now - created;
+      const limitMs = 24 * 60 * 60 * 1000; // 24h
+      return diffMs > limitMs;
+    }
+
+    // calcular tempo restante até 24h
+    function getRemainingTime(createdAt) {
+      const created = new Date(createdAt);
+      if (isNaN(created)) return null;
+      const now = new Date();
+      const limitMs = 24 * 60 * 60 * 1000;
+      const diffMs = limitMs - (now - created);
+      if (diffMs <= 0) return null;
+
+      const totalMinutes = Math.floor(diffMs / (60 * 1000));
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      return { hours, minutes };
+    }
+
+    // formatar texto "faltam Xh Ymin"
+    function formatRemainingText(createdAt) {
+      const r = getRemainingTime(createdAt);
+      if (!r) return null;
+
+      const { hours, minutes } = r;
+      if (hours <= 0 && minutes <= 0) {
+        return "Faltam menos de 1 minuto para expirar";
+      }
+
+      if (hours > 0 && minutes > 0) {
+        return `Faltam ${hours}h ${minutes}min para expirar`;
+      }
+      if (hours > 0 && minutes === 0) {
+        return `Faltam ${hours}h para expirar`;
+      }
+      if (hours === 0 && minutes > 0) {
+        return `Faltam ${minutes}min para expirar`;
+      }
+      return null;
+    }
+
     function copyToClipboard(text) {
       if (!navigator.clipboard) {
         alert("Copie o link manualmente:\n\n" + text);
@@ -420,7 +467,7 @@
       } else {
         viewTitle.textContent = "Painel do Sócio";
         viewSubtitle.textContent =
-          "Crie mensagens, acompanhe seus recados e confirme o que foi lido. Confirmação depende do IP detectado.";
+          "Crie mensagens, acompanhe seus recados e confirme o que foi lido. Confirmação depende do IP detectado (prazo: 24h).";
       }
 
       await fetchIP();
@@ -643,6 +690,10 @@
         paraConfirmar.forEach((m) => {
           const status = m.confirmations[currentUser];
           const jaConfirmou = !!status;
+          const expirado = isExpired(m.createdAt);
+          const remainingText =
+            !jaConfirmou && !expirado ? formatRemainingText(m.createdAt) : null;
+
           html += `<tr>
             <td>${m.titulo}</td>
             <td>${m.autor}</td>
@@ -653,13 +704,22 @@
                   ? `<span class="badge badge-success">Confirmado em ${formatDateTime(
                       status.time
                     )}</span>`
+                  : expirado
+                  ? '<span class="badge badge-danger">Prazo expirado (24h)</span>'
                   : `<span class="badge badge-info">Pendente</span>`
+              }
+              ${
+                remainingText
+                  ? `<div class="muted">${remainingText}</div>`
+                  : ""
               }
             </td>
             <td>
               ${
                 jaConfirmou
                   ? '<span class="muted">Nada a fazer</span>'
+                  : expirado
+                  ? '<span class="muted">Prazo encerrado</span>'
                   : `<button class="btn-sm" onclick="confirmarLeitura('${m.id}')">Confirmar leitura</button>`
               }
             </td>
@@ -739,11 +799,25 @@
       copyToClipboard(fakeUrl);
     };
 
-    // Confirmar leitura com Supabase + log de tentativa
+    // Confirmar leitura com Supabase + log de tentativa + prazo 24h
     window.confirmarLeitura = async function (id) {
       if (!currentIP) {
         alert(
           "Não foi possível identificar o IP do dispositivo. Verifique sua conexão e recarregue a página."
+        );
+        return;
+      }
+
+      const msg = messages.find((m) => m.id === id);
+      if (!msg) {
+        alert("Mensagem não encontrada.");
+        return;
+      }
+
+      // checar prazo de 24h antes de tudo
+      if (isExpired(msg.createdAt)) {
+        alert(
+          "O prazo de 24 horas para reconhecer esta mensagem já foi encerrado."
         );
         return;
       }
@@ -841,17 +915,29 @@
         const totalConfirmadas = Object.values(m.confirmations || {}).filter(
           (v) => v !== null
         ).length;
-        const status = m.deletedByAuthor ? "Excluída pelo autor" : "Ativa";
+        const expirado = isExpired(m.createdAt);
+        const remainingText =
+          !expirado ? formatRemainingText(m.createdAt) : null;
+
+        let statusBadge;
+        if (m.deletedByAuthor) {
+          statusBadge = '<span class="badge badge-danger">Excluída pelo autor</span>';
+        } else if (expirado) {
+          statusBadge = '<span class="badge badge-danger">Prazo expirado (24h)</span>';
+        } else {
+          statusBadge = '<span class="badge badge-info">Ativa</span>';
+        }
 
         html += `<tr>
           <td>${m.titulo}</td>
           <td>${m.autor}</td>
           <td>${formatDateTime(m.createdAt)}</td>
           <td>
+            ${statusBadge}
             ${
-              m.deletedByAuthor
-                ? '<span class="badge badge-danger">Excluída pelo autor</span>'
-                : '<span class="badge badge-info">Ativa</span>'
+              !m.deletedByAuthor && remainingText && !expirado
+                ? `<div class="muted">${remainingText}</div>`
+                : ""
             }
           </td>
           <td><span class="tag">${totalConfirmadas} / ${totalRecebedores}</span></td>
@@ -871,17 +957,30 @@
       const msg = messages.find((m) => m.id === id);
       if (!msg) return;
 
+      const expirado = isExpired(msg.createdAt);
+      const remainingText = !expirado ? formatRemainingText(msg.createdAt) : null;
+
+      let statusTexto;
+      if (msg.deletedByAuthor) {
+        statusTexto = "Excluída pelo autor (mantida para registro)";
+      } else if (expirado) {
+        statusTexto = "Prazo expirado (24h) para reconhecimento";
+      } else {
+        statusTexto = "Ativa";
+      }
+
       let html = "";
       html += `<div class="stack">
         <div>
           <div class="message-title">${msg.titulo}</div>
           <div class="muted">Autor: ${msg.autor}</div>
           <div class="muted">Criada em: ${formatDateTime(msg.createdAt)}</div>
-          <div class="muted">Status: ${
-            msg.deletedByAuthor
-              ? "Excluída pelo autor (mantida para registro)"
-              : "Ativa"
-          }</div>
+          <div class="muted">Status: ${statusTexto}</div>
+          ${
+            !msg.deletedByAuthor && remainingText && !expirado
+              ? `<div class="muted">${remainingText}</div>`
+              : ""
+          }
         </div>
         <div>
           <h3>Conteúdo</h3>
@@ -960,8 +1059,7 @@
     // ------------------------
     // INICIALIZAÇÃO
     // ------------------------
-    // nada a fazer aqui além de deixar funções prontas;
-    // os dados são carregados após login.
+    // dados são carregados após o login
   </script>
 </body>
 </html>
