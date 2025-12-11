@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel de Mensagens - Eco Smart Group</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #e5e7eb;
+    }
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+      margin-bottom: 16px;
+    }
+    h1, h2, h3 { margin: 0 0 12px 0; }
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.2rem; }
+    h3 { font-size: 1rem; color: #4b5563; }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.9rem;
+      box-sizing: border-box;
+      outline: none;
+    }
+    textarea { min-height: 80px; resize: vertical; }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: #2563eb;
+      color: #ffffff;
+      font-weight: 500;
+      gap: 6px;
+      transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.15s;
+    }
+    .btn:hover {
+      background: #1d4ed8;
+      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+      transform: translateY(-1px);
+    }
+    .btn:active { transform: translateY(0); box-shadow: none; }
+    .btn-outline {
+      background: #ffffff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+      box-shadow: none;
+    }
+    .btn-outline:hover { background: #eff6ff; }
+    .btn-danger { background: #dc2626; }
+    .btn-danger:hover {
+      background: #b91c1c;
+      box-shadow: 0 6px 14px rgba(220, 38, 38, 0.35);
+    }
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      border-radius: 999px;
+    }
+    .stack { display: flex; flex-direction: column; gap: 8px; }
+    .stack-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .badge-info { background: #dbeafe; color: #1d4ed8; }
+    .badge-danger { background: #fee2e2; color: #b91c1c; }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    .table th,
+    .table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+    }
+    .table th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: #4b5563;
+    }
+    .muted { font-size: 0.8rem; color: #6b7280; }
+    .tag {
+      font-size: 0.78rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      color: #4b5563;
+      background: #f9fafb;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-title { display: flex; flex-direction: column; gap: 2px; }
+    .pill {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .divider { height: 1px; background: #e5e7eb; margin: 10px 0; }
+    .message-title { font-weight: 600; margin-bottom: 2px; }
+    .message-text {
+      font-size: 0.85rem;
+      color: #4b5563;
+      white-space: pre-wrap;
+    }
+    .no-data {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      padding: 6px 0;
+    }
+    @media (max-width: 640px) {
+      .header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- LOGIN -->
+    <div id="loginCard" class="card">
+      <h1>Painel de Mensagens · Eco Smart Group</h1>
+      <p class="muted">
+        Escolha como deseja entrar: como <strong>Administrador</strong> ou como um dos sócios.
+      </p>
+      <div class="divider"></div>
+
+      <div class="stack">
+        <div>
+          <label for="roleSelect">Entrar como</label>
+          <select id="roleSelect">
+            <option value="Administrador">Administrador</option>
+            <option value="Bruno Ferreira">Bruno Ferreira</option>
+            <option value="Carlos Barretto">Carlos Barretto</option>
+            <option value="Bruno Santos">Bruno Santos</option>
+          </select>
+        </div>
+
+        <div id="adminPasswordContainer">
+          <label for="adminPassword">Senha do administrador</label>
+          <input type="password" id="adminPassword" placeholder="Digite a senha do administrador" />
+          <p class="muted">Senha de teste definida: <code>ESG_2025</code></p>
+        </div>
+
+        <button class="btn" id="btnLogin">Entrar</button>
+      </div>
+    </div>
+
+    <!-- ÁREA PRINCIPAL -->
+    <div id="mainArea" style="display:none;">
+      <div class="card">
+        <div class="header">
+          <div class="header-title">
+            <h1 id="viewTitle">Painel</h1>
+            <span class="muted" id="viewSubtitle"></span>
+            <span class="muted" id="ipInfo"></span>
+          </div>
+          <div class="stack-row">
+            <span class="pill">
+              Usuário ativo:
+              <span id="currentUserLabel"></span>
+            </span>
+            <button class="btn-outline btn-sm" id="btnLogout">Sair</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRIAÇÃO -->
+      <div id="creatorArea" class="card" style="display:none;">
+        <h2>Criar nova mensagem</h2>
+        <p class="muted">
+          A mensagem será registrada e poderá ser confirmada pelos outros sócios.
+        </p>
+        <div class="stack">
+          <div>
+            <label for="msgTitulo">Título da mensagem</label>
+            <input type="text" id="msgTitulo" placeholder="Ex.: Alinhamento de agenda da Eco Smart Group" />
+          </div>
+          <div>
+            <label for="msgTexto">Texto / conteúdo</label>
+            <textarea id="msgTexto" placeholder="Descreva o recado ou alinhamento aqui..."></textarea>
+          </div>
+          <button class="btn" id="btnSalvarMensagem">Salvar mensagem</button>
+          <p id="creatorFeedback" class="muted"></p>
+        </div>
+      </div>
+
+      <!-- VISÃO SÓCIOS -->
+      <div id="sociosArea" style="display:none;">
+        <div class="card">
+          <h2>Minhas mensagens criadas</h2>
+          <p class="muted">
+            Editar ou excluir não apaga o histórico do administrador.
+          </p>
+          <div id="listaMinhasMensagens"></div>
+        </div>
+
+        <div class="card">
+          <h2>Mensagens para eu confirmar</h2>
+          <p class="muted">
+            Mensagens criadas por outros sócios ou pelo administrador, onde você precisa confirmar que leu.
+          </p>
+          <div id="listaParaConfirmar"></div>
+        </div>
+      </div>
+
+      <!-- VISÃO ADMIN -->
+      <div id="adminArea" style="display:none;">
+        <div class="card">
+          <h2>Resumo das mensagens</h2>
+          <p class="muted">
+            O administrador enxerga todas as mensagens, inclusive as que foram excluídas pelos autores.
+          </p>
+          <div id="adminListaMensagens"></div>
+        </div>
+
+        <div class="card">
+          <h2>Detalhes da mensagem selecionada</h2>
+          <div id="adminDetalhesMensagem">
+            <p class="no-data">Selecione uma mensagem na tabela acima para ver os detalhes e as confirmações.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    // ------------------------
+    // SUPABASE
+    // ------------------------
+    const supabaseUrl = "https://rnojyllnuowrzwogzrvs.supabase.co";
+    const supabaseKey =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJub2p5bGxudW93cnp3b2d6cnZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjE4NjYsImV4cCI6MjA4MDk5Nzg2Nn0.UlHgGG79W2t9-L4xsnZNtry5qAZ9-aOQN3Mmt3tCGHc";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // ------------------------
+    // CONFIGURAÇÃO LOCAL
+    // ------------------------
+    const USERS = ["Bruno Ferreira", "Carlos Barretto", "Bruno Santos"];
+    const ADMIN_NAME = "Administrador";
+    const ADMIN_PASSWORD = "ESG_2025";
+
+    let currentIP = null;
+    let currentUser = null;
+    let currentRole = null; // "admin" ou "user"
+    let messages = []; // mensagens enriquecidas para o front
+
+    // ------------------------
+    // IP
+    // ------------------------
+    async function fetchIP() {
+      const ipInfoEl = document.getElementById("ipInfo");
+      ipInfoEl.textContent = "Buscando IP do dispositivo...";
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        currentIP = data.ip;
+        ipInfoEl.textContent = "IP detectado: " + currentIP;
+      } catch (e) {
+        console.error("Erro ao obter IP:", e);
+        currentIP = null;
+        ipInfoEl.textContent =
+          "Não foi possível identificar o IP. A confirmação ficará bloqueada.";
+      }
+    }
+
+    // ------------------------
+    // UTILITÁRIOS
+    // ------------------------
+    function formatDateTime(dateString) {
+      const d = new Date(dateString);
+      if (isNaN(d)) return "";
+      return d.toLocaleString("pt-BR");
+    }
+
+    function copyToClipboard(text) {
+      if (!navigator.clipboard) {
+        alert("Copie o link manualmente:\n\n" + text);
+        return;
+      }
+      navigator.clipboard.writeText(text).then(
+        () => alert("Link copiado para a área de transferência."),
+        () =>
+          alert(
+            "Não foi possível copiar automaticamente. Copie o link manualmente:\n\n" +
+              text
+          )
+      );
+    }
+
+    // ------------------------
+    // ELEMENTOS
+    // ------------------------
+    const loginCard = document.getElementById("loginCard");
+    const mainArea = document.getElementById("mainArea");
+    const roleSelect = document.getElementById("roleSelect");
+    const adminPasswordContainer = document.getElementById(
+      "adminPasswordContainer"
+    );
+    const adminPasswordInput = document.getElementById("adminPassword");
+    const btnLogin = document.getElementById("btnLogin");
+    const btnLogout = document.getElementById("btnLogout");
+    const currentUserLabel = document.getElementById("currentUserLabel");
+    const viewTitle = document.getElementById("viewTitle");
+    const viewSubtitle = document.getElementById("viewSubtitle");
+
+    const creatorArea = document.getElementById("creatorArea");
+    const sociosArea = document.getElementById("sociosArea");
+    const adminArea = document.getElementById("adminArea");
+
+    const msgTituloInput = document.getElementById("msgTitulo");
+    const msgTextoInput = document.getElementById("msgTexto");
+    const btnSalvarMensagem = document.getElementById("btnSalvarMensagem");
+    const creatorFeedback = document.getElementById("creatorFeedback");
+
+    const listaMinhasMensagens = document.getElementById("listaMinhasMensagens");
+    const listaParaConfirmar = document.getElementById("listaParaConfirmar");
+
+    const adminListaMensagens = document.getElementById("adminListaMensagens");
+    const adminDetalhesMensagem = document.getElementById(
+      "adminDetalhesMensagem"
+    );
+
+    // ------------------------
+    // LOGIN
+    // ------------------------
+    roleSelect.addEventListener("change", () => {
+      if (roleSelect.value === "Administrador") {
+        adminPasswordContainer.style.display = "block";
+      } else {
+        adminPasswordContainer.style.display = "none";
+      }
+    });
+
+    btnLogin.addEventListener("click", async () => {
+      const roleValue = roleSelect.value;
+      if (roleValue === "Administrador") {
+        const pass = adminPasswordInput.value.trim();
+        if (pass !== ADMIN_PASSWORD) {
+          alert("Senha do administrador incorreta.");
+          return;
+        }
+        currentUser = ADMIN_NAME;
+        currentRole = "admin";
+      } else {
+        currentUser = roleValue;
+        currentRole = "user";
+      }
+
+      adminPasswordInput.value = "";
+      loginCard.style.display = "none";
+      mainArea.style.display = "block";
+      currentUserLabel.textContent = currentUser;
+
+      if (currentRole === "admin") {
+        viewTitle.textContent = "Área do Administrador";
+        viewSubtitle.textContent =
+          "Visão completa das mensagens e confirmações de leitura.";
+      } else {
+        viewTitle.textContent = "Painel do Sócio";
+        viewSubtitle.textContent =
+          "Crie mensagens, acompanhe seus recados e confirme o que foi lido. Confirmação depende do IP detectado.";
+      }
+
+      await fetchIP();
+      await refreshAndRender();
+    });
+
+    btnLogout.addEventListener("click", () => {
+      currentUser = null;
+      currentRole = null;
+      loginCard.style.display = "block";
+      mainArea.style.display = "none";
+    });
+
+    // ------------------------
+    // CARGA DE DADOS DO SUPABASE
+    // ------------------------
+    async function loadMessagesFromSupabase() {
+      // mensagens
+      const { data: msgs, error: errMsgs } = await supabase
+        .from("messages")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (errMsgs) {
+        console.error("Erro ao carregar mensagens:", errMsgs);
+        messages = [];
+        return;
+      }
+
+      // confirmações
+      const { data: confs, error: errConfs } = await supabase
+        .from("message_confirmations")
+        .select("*");
+      if (errConfs) {
+        console.error("Erro ao carregar confirmações:", errConfs);
+      }
+
+      // tentativas
+      const { data: atts, error: errAtts } = await supabase
+        .from("message_attempts")
+        .select("*");
+      if (errAtts) {
+        console.error("Erro ao carregar tentativas:", errAtts);
+      }
+
+      const confsByMsg = {};
+      (confs || []).forEach((row) => {
+        if (!confsByMsg[row.message_id]) confsByMsg[row.message_id] = [];
+        confsByMsg[row.message_id].push(row);
+      });
+
+      const attsByMsg = {};
+      (atts || []).forEach((row) => {
+        if (!attsByMsg[row.message_id]) attsByMsg[row.message_id] = [];
+        attsByMsg[row.message_id].push(row);
+      });
+
+      messages = (msgs || []).map((m) => {
+        const obj = {
+          id: m.id,
+          titulo: m.title,
+          texto: m.body,
+          autor: m.author_name,
+          createdAt: m.created_at,
+          deletedByAuthor: m.deleted_by_author,
+          confirmations: {},
+          attempts: [],
+        };
+
+        // confirmações default: outros sócios
+        USERS.forEach((u) => {
+          if (u !== obj.autor) obj.confirmations[u] = null;
+        });
+
+        // aplicar confirmações
+        (confsByMsg[m.id] || []).forEach((c) => {
+          obj.confirmations[c.user_name] = {
+            time: c.confirmed_at,
+            ip: c.ip,
+          };
+        });
+
+        // aplicar tentativas
+        obj.attempts = (attsByMsg[m.id] || []).map((a) => ({
+          user: a.attempted_by,
+          ip: a.ip,
+          time: a.attempted_at,
+          reason: a.reason,
+        }));
+
+        return obj;
+      });
+    }
+
+    async function refreshAndRender() {
+      await loadMessagesFromSupabase();
+      renderView();
+    }
+
+    // ------------------------
+    // CRIAÇÃO DE MENSAGEM
+    // ------------------------
+    btnSalvarMensagem.addEventListener("click", async () => {
+      const titulo = msgTituloInput.value.trim();
+      const texto = msgTextoInput.value.trim();
+
+      if (!titulo) {
+        alert("Informe um título para a mensagem.");
+        return;
+      }
+      if (!texto) {
+        alert("Informe o conteúdo da mensagem.");
+        return;
+      }
+
+      const { error } = await supabase.from("messages").insert({
+        title: titulo,
+        body: texto,
+        author_name: currentUser,
+      });
+
+      if (error) {
+        console.error("Erro ao salvar mensagem:", error);
+        alert("Erro ao salvar mensagem.");
+        return;
+      }
+
+      msgTituloInput.value = "";
+      msgTextoInput.value = "";
+      creatorFeedback.textContent = "Mensagem criada e registrada com sucesso.";
+      setTimeout(() => (creatorFeedback.textContent = ""), 3000);
+
+      await refreshAndRender();
+    });
+
+    // ------------------------
+    // VISÃO PRINCIPAL
+    // ------------------------
+    function renderView() {
+      creatorArea.style.display = currentUser ? "block" : "none";
+
+      if (currentRole === "admin") {
+        sociosArea.style.display = "none";
+        adminArea.style.display = "block";
+        renderAdminView();
+      } else {
+        sociosArea.style.display = "block";
+        adminArea.style.display = "none";
+        renderSociosView();
+      }
+    }
+
+    // ------------------------
+    // VISÃO SÓCIOS
+    // ------------------------
+    function renderSociosView() {
+      // minhas mensagens
+      const minhas = messages.filter(
+        (m) => m.autor === currentUser && !m.deletedByAuthor
+      );
+
+      if (minhas.length === 0) {
+        listaMinhasMensagens.innerHTML =
+          '<p class="no-data">Você ainda não criou nenhuma mensagem.</p>';
+      } else {
+        let html =
+          '<table class="table"><thead><tr>' +
+          "<th>Título</th>" +
+          "<th>Criada em</th>" +
+          "<th>Confirmações</th>" +
+          "<th>Ações</th>" +
+          "</tr></thead><tbody>";
+        minhas.forEach((m) => {
+          const totalRecebedores = Object.keys(m.confirmations || {}).length;
+          const totalConfirmadas = Object.values(m.confirmations || {}).filter(
+            (v) => v !== null
+          ).length;
+
+          html += `<tr>
+            <td>
+              <div class="message-title">${m.titulo}</div>
+              <div class="muted">Autor: ${m.autor}</div>
+            </td>
+            <td>${formatDateTime(m.createdAt)}</td>
+            <td><span class="tag">${totalConfirmadas} / ${totalRecebedores}</span></td>
+            <td>
+              <div class="stack-row">
+                <button class="btn-sm btn-outline" onclick="copyMessageLink('${m.id}')">Copiar link</button>
+                <button class="btn-sm btn-outline" onclick="editarMensagem('${m.id}')">Editar</button>
+                <button class="btn-sm btn-danger" onclick="excluirMensagem('${m.id}')">Excluir</button>
+              </div>
+            </td>
+          </tr>`;
+        });
+        html += "</tbody></table>";
+        listaMinhasMensagens.innerHTML = html;
+      }
+
+      // mensagens para confirmar
+      const paraConfirmar = messages.filter((m) => {
+        if (m.deletedByAuthor) return false;
+        if (m.autor === currentUser) return false;
+        if (!m.confirmations || !(currentUser in m.confirmations)) return false;
+        return true;
+      });
+
+      if (paraConfirmar.length === 0) {
+        listaParaConfirmar.innerHTML =
+          '<p class="no-data">Não há mensagens pendentes para você confirmar.</p>';
+      } else {
+        let html =
+          '<table class="table"><thead><tr>' +
+          "<th>Título</th>" +
+          "<th>Autor</th>" +
+          "<th>Conteúdo</th>" +
+          "<th>Status</th>" +
+          "<th>Ação</th>" +
+          "</tr></thead><tbody>";
+
+        paraConfirmar.forEach((m) => {
+          const status = m.confirmations[currentUser];
+          const jaConfirmou = !!status;
+          html += `<tr>
+            <td>${m.titulo}</td>
+            <td>${m.autor}</td>
+            <td><div class="message-text">${m.texto}</div></td>
+            <td>
+              ${
+                jaConfirmou
+                  ? `<span class="badge badge-success">Confirmado em ${formatDateTime(
+                      status.time
+                    )}</span>`
+                  : `<span class="badge badge-info">Pendente</span>`
+              }
+            </td>
+            <td>
+              ${
+                jaConfirmou
+                  ? '<span class="muted">Nada a fazer</span>'
+                  : `<button class="btn-sm" onclick="confirmarLeitura('${m.id}')">Confirmar leitura</button>`
+              }
+            </td>
+          </tr>`;
+        });
+
+        html += "</tbody></table>";
+        listaParaConfirmar.innerHTML = html;
+      }
+    }
+
+    // Editar mensagem
+    window.editarMensagem = async function (id) {
+      const msg = messages.find((m) => m.id === id);
+      if (!msg) return;
+      if (msg.autor !== currentUser) {
+        alert("Você só pode editar mensagens criadas por você.");
+        return;
+      }
+      const novoTitulo = prompt("Edite o título:", msg.titulo);
+      if (novoTitulo === null) return;
+      const novoTexto = prompt("Edite o texto:", msg.texto);
+      if (novoTexto === null) return;
+
+      const titulo = novoTitulo.trim() || msg.titulo;
+      const texto = novoTexto.trim() || msg.texto;
+
+      const { error } = await supabase
+        .from("messages")
+        .update({ title: titulo, body: texto })
+        .eq("id", id)
+        .eq("author_name", currentUser);
+
+      if (error) {
+        console.error("Erro ao editar mensagem:", error);
+        alert("Erro ao editar mensagem.");
+        return;
+      }
+
+      await refreshAndRender();
+    };
+
+    // Excluir (marca como excluída)
+    window.excluirMensagem = async function (id) {
+      const msg = messages.find((m) => m.id === id);
+      if (!msg) return;
+      if (msg.autor !== currentUser) {
+        alert("Você só pode excluir mensagens criadas por você.");
+        return;
+      }
+      if (
+        !confirm(
+          "Tem certeza que deseja excluir esta mensagem da sua visão? O administrador continuará vendo o histórico."
+        )
+      )
+        return;
+
+      const { error } = await supabase
+        .from("messages")
+        .update({ deleted_by_author: true })
+        .eq("id", id)
+        .eq("author_name", currentUser);
+
+      if (error) {
+        console.error("Erro ao excluir mensagem:", error);
+        alert("Erro ao excluir mensagem.");
+        return;
+      }
+
+      await refreshAndRender();
+    };
+
+    // Copiar link simbólico
+    window.copyMessageLink = function (id) {
+      const fakeUrl =
+        window.location.origin + window.location.pathname + "?mensagem=" + id;
+      copyToClipboard(fakeUrl);
+    };
+
+    // Confirmar leitura com Supabase + log de tentativa
+    window.confirmarLeitura = async function (id) {
+      if (!currentIP) {
+        alert(
+          "Não foi possível identificar o IP do dispositivo. Verifique sua conexão e recarregue a página."
+        );
+        return;
+      }
+
+      // Buscar confirmações dessa mensagem direto no Supabase
+      const { data: confRows, error } = await supabase
+        .from("message_confirmations")
+        .select("*")
+        .eq("message_id", id);
+
+      if (error) {
+        console.error("Erro ao buscar confirmações:", error);
+        alert("Erro ao verificar confirmações.");
+        return;
+      }
+
+      const confs = confRows || [];
+
+      // Já confirmou com este usuário?
+      const jaConfirmou = confs.find((c) => c.user_name === currentUser);
+      if (jaConfirmou) {
+        alert("Você já confirmou esta mensagem.");
+        return;
+      }
+
+      // Verificar se o IP já foi usado por outro usuário
+      const outroComMesmoIP = confs.find(
+        (c) => c.ip === currentIP && c.user_name !== currentUser
+      );
+      if (outroComMesmoIP) {
+        // registrar tentativa bloqueada
+        const reason = `IP já utilizado pelo usuário ${outroComMesmoIP.user_name} nesta mensagem`;
+        const { error: attErr } = await supabase
+          .from("message_attempts")
+          .insert({
+            message_id: id,
+            attempted_by: currentUser,
+            ip: currentIP,
+            reason,
+          });
+        if (attErr) {
+          console.error("Erro ao registrar tentativa:", attErr);
+        }
+
+        alert(
+          "Este IP já foi utilizado para confirmar esta mensagem em outro usuário. Não é possível confirmar novamente."
+        );
+        await refreshAndRender();
+        return;
+      }
+
+      // registrar confirmação
+      const { error: confErr } = await supabase
+        .from("message_confirmations")
+        .insert({
+          message_id: id,
+          user_name: currentUser,
+          ip: currentIP,
+        });
+
+      if (confErr) {
+        console.error("Erro ao registrar confirmação:", confErr);
+        alert("Erro ao registrar confirmação.");
+        return;
+      }
+
+      alert("Leitura confirmada com sucesso.");
+      await refreshAndRender();
+    };
+
+    // ------------------------
+    // VISÃO ADMIN
+    // ------------------------
+    function renderAdminView() {
+      if (messages.length === 0) {
+        adminListaMensagens.innerHTML =
+          '<p class="no-data">Não há mensagens registradas ainda.</p>';
+        adminDetalhesMensagem.innerHTML =
+          '<p class="no-data">Selecione uma mensagem para ver detalhes.</p>';
+        return;
+      }
+
+      let html =
+        '<table class="table"><thead><tr>' +
+        "<th>Título</th>" +
+        "<th>Autor</th>" +
+        "<th>Data</th>" +
+        "<th>Status</th>" +
+        "<th>Confirmações</th>" +
+        "<th>Ver</th>" +
+        "</tr></thead><tbody>";
+
+      messages.forEach((m) => {
+        const totalRecebedores = Object.keys(m.confirmations || {}).length;
+        const totalConfirmadas = Object.values(m.confirmations || {}).filter(
+          (v) => v !== null
+        ).length;
+        const status = m.deletedByAuthor ? "Excluída pelo autor" : "Ativa";
+
+        html += `<tr>
+          <td>${m.titulo}</td>
+          <td>${m.autor}</td>
+          <td>${formatDateTime(m.createdAt)}</td>
+          <td>
+            ${
+              m.deletedByAuthor
+                ? '<span class="badge badge-danger">Excluída pelo autor</span>'
+                : '<span class="badge badge-info">Ativa</span>'
+            }
+          </td>
+          <td><span class="tag">${totalConfirmadas} / ${totalRecebedores}</span></td>
+          <td>
+            <button class="btn-sm btn-outline" onclick="verDetalhesAdmin('${m.id}')">
+              Detalhes
+            </button>
+          </td>
+        </tr>`;
+      });
+
+      html += "</tbody></table>";
+      adminListaMensagens.innerHTML = html;
+    }
+
+    window.verDetalhesAdmin = function (id) {
+      const msg = messages.find((m) => m.id === id);
+      if (!msg) return;
+
+      let html = "";
+      html += `<div class="stack">
+        <div>
+          <div class="message-title">${msg.titulo}</div>
+          <div class="muted">Autor: ${msg.autor}</div>
+          <div class="muted">Criada em: ${formatDateTime(msg.createdAt)}</div>
+          <div class="muted">Status: ${
+            msg.deletedByAuthor
+              ? "Excluída pelo autor (mantida para registro)"
+              : "Ativa"
+          }</div>
+        </div>
+        <div>
+          <h3>Conteúdo</h3>
+          <div class="message-text">${msg.texto}</div>
+        </div>
+        <div>
+          <h3>Confirmações de leitura (por usuário e IP)</h3>
+      `;
+
+      const confs = msg.confirmations || {};
+      if (Object.keys(confs).length === 0) {
+        html +=
+          '<p class="no-data">Não há configuração de confirmações para esta mensagem.</p>';
+      } else {
+        html +=
+          '<table class="table"><thead><tr>' +
+          "<th>Sócio</th>" +
+          "<th>Status</th>" +
+          "<th>Data/hora</th>" +
+          "<th>IP</th>" +
+          "</tr></thead><tbody>";
+
+        Object.keys(confs).forEach((user) => {
+          const info = confs[user];
+          html += `<tr>
+            <td>${user}</td>
+            <td>${
+              info
+                ? '<span class="badge badge-success">Confirmado</span>'
+                : '<span class="badge badge-info">Pendente</span>'
+            }</td>
+            <td>${info ? formatDateTime(info.time) : "-"}</td>
+            <td>${info ? info.ip : "-"}</td>
+          </tr>`;
+        });
+
+        html += "</tbody></table>";
+      }
+
+      html += "</div>";
+
+      // Tentativas bloqueadas
+      html += `<div>
+        <h3>Tentativas de confirmação bloqueadas</h3>
+      `;
+
+      const attempts = Array.isArray(msg.attempts) ? msg.attempts : [];
+      if (attempts.length === 0) {
+        html +=
+          '<p class="no-data">Não foram registradas tentativas bloqueadas para esta mensagem.</p>';
+      } else {
+        html +=
+          '<table class="table"><thead><tr>' +
+          "<th>Usuário que tentou</th>" +
+          "<th>Data/hora</th>" +
+          "<th>IP</th>" +
+          "<th>Motivo</th>" +
+          "</tr></thead><tbody>";
+
+        attempts.forEach((att) => {
+          html += `<tr>
+            <td>${att.user}</td>
+            <td>${formatDateTime(att.time)}</td>
+            <td>${att.ip}</td>
+            <td>${att.reason}</td>
+          </tr>`;
+        });
+
+        html += "</tbody></table>";
+      }
+
+      html += "</div></div>";
+      adminDetalhesMensagem.innerHTML = html;
+    };
+
+    // ------------------------
+    // INICIALIZAÇÃO
+    // ------------------------
+    // nada a fazer aqui além de deixar funções prontas;
+    // os dados são carregados após login.
+  </script>
+</body>
+</html>
