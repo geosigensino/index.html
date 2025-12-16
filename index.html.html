@@ -4,182 +4,230 @@
   <meta charset="UTF-8" />
   <title>Painel de Mensagens - Eco Smart Group</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-    :root {
+    :root{
+      /* Paleta (base) */
+      --green-strong:#1d4a0b;   /* principal */
+      --green-hover:#2c5916;    /* hover */
+      --green-soft:#577349;     /* apoio */
+      --bg:#f2f2f2;             /* fundo claro */
+      --text:#0b0b0b;           /* texto principal */
+      --muted:#4b5563;          /* texto secundário */
+      --border:#d1d5db;
+      --card:#ffffff;
+      --danger:#b91c1c;
+      --danger-hover:#991b1b;
+
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f3f4f6;
-      color: #111827;
+      background: var(--bg);
+      color: var(--text);
     }
-    body {
-      margin: 0;
-      padding: 0;
-      background: #e5e7eb;
-    }
-    .app {
+
+    body { margin: 0; padding: 0; background: var(--bg); }
+
+    .app{
       max-width: 980px;
       margin: 0 auto;
       padding: 16px;
     }
-    .card {
-      background: #ffffff;
+
+    .card{
+      background: var(--card);
       border-radius: 12px;
       padding: 16px 18px;
       box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
       margin-bottom: 16px;
+      border: 1px solid rgba(0,0,0,0.04);
     }
-    h1, h2, h3 { margin: 0 0 12px 0; }
-    h1 { font-size: 1.4rem; }
-    h2 { font-size: 1.2rem; }
-    h3 { font-size: 1rem; color: #4b5563; }
-    label {
-      display: block;
-      font-size: 0.85rem;
-      margin-bottom: 4px;
-      color: #4b5563;
+
+    h1,h2,h3{ margin: 0 0 12px 0; }
+    h1{ font-size: 1.4rem; }
+    h2{ font-size: 1.2rem; }
+    h3{ font-size: 1rem; color: var(--muted); }
+
+    label{
+      display:block;
+      font-size:.85rem;
+      margin-bottom:4px;
+      color: var(--muted);
     }
+
     input[type="text"],
     input[type="password"],
     select,
-    textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid #d1d5db;
-      font-size: 0.9rem;
+    textarea{
+      width:100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: .95rem;
       box-sizing: border-box;
       outline: none;
+      background:#fff;
+      color: var(--text);
     }
-    textarea { min-height: 80px; resize: vertical; }
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+
+    textarea{ min-height: 90px; resize: vertical; }
+
+    input:focus, select:focus, textarea:focus{
+      border-color: var(--green-strong);
+      box-shadow: 0 0 0 3px rgba(29, 74, 11, 0.15);
     }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 14px;
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 16px;
       border-radius: 999px;
       border: none;
-      font-size: 0.9rem;
+      font-size: .95rem;
       cursor: pointer;
-      background: #2563eb;
-      color: #ffffff;
-      font-weight: 500;
+      background: var(--green-strong);
+      color: #fff;
+      font-weight: 600;
       gap: 6px;
-      transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.15s;
+      transition: transform .05s ease, box-shadow .1s ease, background .15s ease;
+      box-shadow: 0 10px 18px rgba(29, 74, 11, 0.18);
     }
-    .btn:hover {
-      background: #1d4ed8;
-      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+
+    .btn:hover{
+      background: var(--green-hover);
+      box-shadow: 0 12px 22px rgba(29, 74, 11, 0.24);
       transform: translateY(-1px);
     }
-    .btn:active { transform: translateY(0); box-shadow: none; }
-    .btn-outline {
-      background: #ffffff;
-      color: #2563eb;
-      border: 1px solid #bfdbfe;
-      box-shadow: none;
+    .btn:active{ transform: translateY(0); box-shadow: none; }
+
+    .btn-outline{
+      background:#fff;
+      color: var(--green-strong);
+      border:1px solid rgba(29, 74, 11, 0.25);
+      box-shadow:none;
     }
-    .btn-outline:hover { background: #eff6ff; }
-    .btn-danger { background: #dc2626; }
-    .btn-danger:hover {
-      background: #b91c1c;
-      box-shadow: 0 6px 14px rgba(220, 38, 38, 0.35);
+    .btn-outline:hover{
+      background: rgba(29, 74, 11, 0.06);
+      transform: translateY(-1px);
     }
-    .btn-sm {
-      padding: 5px 10px;
-      font-size: 0.78rem;
+
+    .btn-danger{ background: var(--danger); box-shadow: 0 10px 18px rgba(185, 28, 28, 0.15); }
+    .btn-danger:hover{ background: var(--danger-hover); }
+
+    .btn-sm{
+      padding: 7px 12px;
+      font-size: .8rem;
       border-radius: 999px;
     }
-    .stack { display: flex; flex-direction: column; gap: 8px; }
-    .stack-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 8px;
+
+    .stack{ display:flex; flex-direction:column; gap:10px; }
+    .stack-row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding: 3px 10px;
       border-radius: 999px;
-      font-size: 0.7rem;
+      font-size: .75rem;
       background: #e5e7eb;
-      color: #374151;
+      color: #111827;
+      border: 1px solid rgba(0,0,0,0.06);
+      line-height: 1.2;
     }
-    .badge-info { background: #dbeafe; color: #1d4ed8; }
-    .badge-danger { background: #fee2e2; color: #b91c1c; }
-    .badge-success { background: #dcfce7; color: #15803d; }
-    .table {
-      width: 100%;
+
+    .badge-info{ background: rgba(87, 115, 73, 0.15); color: var(--green-strong); border-color: rgba(87,115,73,0.25); }
+    .badge-success{ background: rgba(29, 74, 11, 0.12); color: var(--green-strong); border-color: rgba(29,74,11,0.25); }
+    .badge-danger{ background: rgba(185, 28, 28, 0.12); color: var(--danger); border-color: rgba(185,28,28,0.2); }
+
+    .table-wrap{
+      width:100%;
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table{
+      width:100%;
       border-collapse: collapse;
-      font-size: 0.82rem;
+      font-size: .85rem;
+      min-width: 760px; /* garante boa leitura e ativa scroll no mobile */
     }
-    .table th,
-    .table td {
-      padding: 6px 8px;
+
+    .table th, .table td{
+      padding: 10px 10px;
       border-bottom: 1px solid #e5e7eb;
-      text-align: left;
+      text-align:left;
       vertical-align: top;
     }
-    .table th {
-      background: #f9fafb;
+
+    .table th{
+      background: #fafafa;
+      font-weight: 700;
+      color: #374151;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .muted{ font-size:.85rem; color:#6b7280; }
+    .tag{
+      font-size:.8rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(29, 74, 11, 0.18);
+      color: var(--green-strong);
+      background: rgba(29,74,11,0.06);
       font-weight: 600;
-      color: #4b5563;
     }
-    .muted { font-size: 0.8rem; color: #6b7280; }
-    .tag {
-      font-size: 0.78rem;
-      padding: 2px 6px;
+
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+    }
+
+    .header-title{ display:flex; flex-direction:column; gap: 3px; }
+
+    .pill{
+      font-size:.8rem;
+      padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      color: #4b5563;
-      background: #f9fafb;
+      background: rgba(29,74,11,0.08);
+      color: var(--green-strong);
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      border: 1px solid rgba(29,74,11,0.18);
+      font-weight: 600;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-    .header-title { display: flex; flex-direction: column; gap: 2px; }
-    .pill {
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #eff6ff;
-      color: #1d4ed8;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .divider { height: 1px; background: #e5e7eb; margin: 10px 0; }
-    .message-title { font-weight: 600; margin-bottom: 2px; }
-    .message-text {
-      font-size: 0.85rem;
-      color: #4b5563;
-      white-space: pre-wrap;
-    }
-    .no-data {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      padding: 6px 0;
-    }
-    @media (max-width: 640px) {
-      .header { flex-direction: column; align-items: flex-start; }
+
+    .divider{ height:1px; background:#e5e7eb; margin: 10px 0; }
+    .message-title{ font-weight: 800; margin-bottom: 2px; }
+    .message-text{ font-size: .9rem; color: var(--muted); white-space: pre-wrap; }
+
+    .no-data{ font-size:.9rem; color:#9ca3af; padding: 6px 0; }
+
+    /* Mobile */
+    @media (max-width: 640px){
+      .app{ padding: 10px; }
+      .card{ padding: 14px; }
+      .header{ flex-direction: column; align-items:flex-start; }
+      .stack-row{ width: 100%; }
+      .stack-row .btn-sm, .stack-row .btn, .btn-outline.btn-sm{
+        width: 100%;
+        justify-content:center;
+      }
+      .table{ min-width: 740px; } /* mantém scroll no mobile */
     }
   </style>
 </head>
+
 <body>
   <div class="app">
     <!-- LOGIN -->
     <div id="loginCard" class="card">
       <h1>Painel de Mensagens · Eco Smart Group</h1>
       <p class="muted">
-        Escolha como deseja entrar: como <strong>Administrador</strong> ou como um dos sócios.
+        Selecione o perfil e informe a senha.
       </p>
       <div class="divider"></div>
 
@@ -197,7 +245,11 @@
         <div id="adminPasswordContainer">
           <label for="adminPassword">Senha do administrador</label>
           <input type="password" id="adminPassword" placeholder="Digite a senha do administrador" />
-          <p class="muted">Admin: <code>********</code></p>
+        </div>
+
+        <div id="userPasswordContainer" style="display:none;">
+          <label for="userPassword">Senha do sócio</label>
+          <input type="password" id="userPassword" placeholder="Digite a senha do seu usuário" />
         </div>
 
         <button class="btn" id="btnLogin">Entrar</button>
@@ -214,10 +266,7 @@
             <span class="muted" id="ipInfo"></span>
           </div>
           <div class="stack-row">
-            <span class="pill">
-              Usuário ativo:
-              <span id="currentUserLabel"></span>
-            </span>
+            <span class="pill">Usuário ativo: <span id="currentUserLabel"></span></span>
             <button class="btn-outline btn-sm" id="btnLogout">Sair</button>
           </div>
         </div>
@@ -226,9 +275,7 @@
       <!-- CRIAÇÃO -->
       <div id="creatorArea" class="card" style="display:none;">
         <h2>Criar nova mensagem</h2>
-        <p class="muted">
-          A mensagem será registrada e poderá ser confirmada pelos outros sócios.
-        </p>
+        <p class="muted">A mensagem será registrada e poderá ser confirmada pelos outros sócios (prazo: 24h).</p>
         <div class="stack">
           <div>
             <label for="msgTitulo">Título da mensagem</label>
@@ -247,17 +294,13 @@
       <div id="sociosArea" style="display:none;">
         <div class="card">
           <h2>Minhas mensagens criadas</h2>
-          <p class="muted">
-            Editar ou excluir não apaga o histórico do administrador.
-          </p>
+          <p class="muted">Editar ou excluir não apaga o histórico do administrador.</p>
           <div id="listaMinhasMensagens"></div>
         </div>
 
         <div class="card">
           <h2>Mensagens para eu confirmar</h2>
-          <p class="muted">
-            Mensagens criadas por outros sócios ou pelo administrador, onde você precisa confirmar que leu.
-          </p>
+          <p class="muted">Confirmação válida por 24 horas a partir da criação.</p>
           <div id="listaParaConfirmar"></div>
         </div>
       </div>
@@ -266,9 +309,7 @@
       <div id="adminArea" style="display:none;">
         <div class="card">
           <h2>Resumo das mensagens</h2>
-          <p class="muted">
-            O administrador enxerga todas as mensagens, inclusive as que foram excluídas pelos autores.
-          </p>
+          <p class="muted">O administrador enxerga todas as mensagens, inclusive as excluídas pelos autores.</p>
           <div id="adminListaMensagens"></div>
         </div>
 
@@ -286,29 +327,30 @@
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // ------------------------
     // SUPABASE
-    // ------------------------
     const supabaseUrl = "https://rnojyllnuowrzwogzrvs.supabase.co";
     const supabaseKey =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJub2p5bGxudW93cnp3b2d6cnZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjE4NjYsImV4cCI6MjA4MDk5Nzg2Nn0.UlHgGG79W2t9-L4xsnZNtry5qAZ9-aOQN3Mmt3tCGHc";
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // ------------------------
-    // CONFIGURAÇÃO LOCAL
-    // ------------------------
+    // CONFIG
     const USERS = ["Bruno Ferreira", "Carlos Barretto", "Bruno Santos"];
     const ADMIN_NAME = "Administrador";
     const ADMIN_PASSWORD = "ESG_2025";
 
+    // Senhas dos sócios (troque aqui quando quiser)
+    const USER_PASSWORDS = {
+      "Bruno Ferreira": "BF_eco2025!",
+      "Carlos Barretto": "CB_eco2025!",
+      "Bruno Santos": "BS_eco2025!",
+    };
+
     let currentIP = null;
     let currentUser = null;
-    let currentRole = null; // "admin" ou "user"
-    let messages = []; // mensagens enriquecidas para o front
+    let currentRole = null; // "admin" | "user"
+    let messages = [];
 
-    // ------------------------
     // IP
-    // ------------------------
     async function fetchIP() {
       const ipInfoEl = document.getElementById("ipInfo");
       ipInfoEl.textContent = "Buscando IP do dispositivo...";
@@ -325,26 +367,20 @@
       }
     }
 
-    // ------------------------
-    // UTILITÁRIOS
-    // ------------------------
+    // UTIL
     function formatDateTime(dateString) {
       const d = new Date(dateString);
       if (isNaN(d)) return "";
       return d.toLocaleString("pt-BR");
     }
 
-    // checar se passou de 24 horas
     function isExpired(createdAt) {
       const created = new Date(createdAt);
       if (isNaN(created)) return false;
       const now = new Date();
-      const diffMs = now - created;
-      const limitMs = 24 * 60 * 60 * 1000; // 24h
-      return diffMs > limitMs;
+      return (now - created) > (24 * 60 * 60 * 1000);
     }
 
-    // calcular tempo restante até 24h
     function getRemainingTime(createdAt) {
       const created = new Date(createdAt);
       if (isNaN(created)) return null;
@@ -352,33 +388,20 @@
       const limitMs = 24 * 60 * 60 * 1000;
       const diffMs = limitMs - (now - created);
       if (diffMs <= 0) return null;
-
       const totalMinutes = Math.floor(diffMs / (60 * 1000));
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
       return { hours, minutes };
     }
 
-    // formatar texto "faltam Xh Ymin"
     function formatRemainingText(createdAt) {
       const r = getRemainingTime(createdAt);
       if (!r) return null;
-
       const { hours, minutes } = r;
-      if (hours <= 0 && minutes <= 0) {
-        return "Faltam menos de 1 minuto para expirar";
-      }
-
-      if (hours > 0 && minutes > 0) {
-        return `Faltam ${hours}h ${minutes}min para expirar`;
-      }
-      if (hours > 0 && minutes === 0) {
-        return `Faltam ${hours}h para expirar`;
-      }
-      if (hours === 0 && minutes > 0) {
-        return `Faltam ${minutes}min para expirar`;
-      }
-      return null;
+      if (hours <= 0 && minutes <= 0) return "Faltam menos de 1 minuto para expirar";
+      if (hours > 0 && minutes > 0) return `Faltam ${hours}h ${minutes}min para expirar`;
+      if (hours > 0 && minutes === 0) return `Faltam ${hours}h para expirar`;
+      return `Faltam ${minutes}min para expirar`;
     }
 
     function copyToClipboard(text) {
@@ -388,24 +411,18 @@
       }
       navigator.clipboard.writeText(text).then(
         () => alert("Link copiado para a área de transferência."),
-        () =>
-          alert(
-            "Não foi possível copiar automaticamente. Copie o link manualmente:\n\n" +
-              text
-          )
+        () => alert("Não foi possível copiar automaticamente. Copie manualmente:\n\n" + text)
       );
     }
 
-    // ------------------------
     // ELEMENTOS
-    // ------------------------
     const loginCard = document.getElementById("loginCard");
     const mainArea = document.getElementById("mainArea");
     const roleSelect = document.getElementById("roleSelect");
-    const adminPasswordContainer = document.getElementById(
-      "adminPasswordContainer"
-    );
+    const adminPasswordContainer = document.getElementById("adminPasswordContainer");
+    const userPasswordContainer = document.getElementById("userPasswordContainer");
     const adminPasswordInput = document.getElementById("adminPassword");
+    const userPasswordInput = document.getElementById("userPassword");
     const btnLogin = document.getElementById("btnLogin");
     const btnLogout = document.getElementById("btnLogout");
     const currentUserLabel = document.getElementById("currentUserLabel");
@@ -425,23 +442,25 @@
     const listaParaConfirmar = document.getElementById("listaParaConfirmar");
 
     const adminListaMensagens = document.getElementById("adminListaMensagens");
-    const adminDetalhesMensagem = document.getElementById(
-      "adminDetalhesMensagem"
-    );
+    const adminDetalhesMensagem = document.getElementById("adminDetalhesMensagem");
 
-    // ------------------------
-    // LOGIN
-    // ------------------------
-    roleSelect.addEventListener("change", () => {
-      if (roleSelect.value === "Administrador") {
+    // LOGIN UI
+    function syncLoginUI() {
+      const role = roleSelect.value;
+      if (role === "Administrador") {
         adminPasswordContainer.style.display = "block";
+        userPasswordContainer.style.display = "none";
       } else {
         adminPasswordContainer.style.display = "none";
+        userPasswordContainer.style.display = "block";
       }
-    });
+    }
+    roleSelect.addEventListener("change", syncLoginUI);
+    syncLoginUI();
 
     btnLogin.addEventListener("click", async () => {
       const roleValue = roleSelect.value;
+
       if (roleValue === "Administrador") {
         const pass = adminPasswordInput.value.trim();
         if (pass !== ADMIN_PASSWORD) {
@@ -451,41 +470,50 @@
         currentUser = ADMIN_NAME;
         currentRole = "admin";
       } else {
+        const pass = userPasswordInput.value.trim();
+        const expected = USER_PASSWORDS[roleValue];
+        if (!expected) {
+          alert("Usuário sem senha configurada. Ajuste USER_PASSWORDS no código.");
+          return;
+        }
+        if (pass !== expected) {
+          alert("Senha do usuário incorreta.");
+          return;
+        }
         currentUser = roleValue;
         currentRole = "user";
       }
 
       adminPasswordInput.value = "";
+      userPasswordInput.value = "";
+
       loginCard.style.display = "none";
       mainArea.style.display = "block";
       currentUserLabel.textContent = currentUser;
 
       if (currentRole === "admin") {
         viewTitle.textContent = "Área do Administrador";
-        viewSubtitle.textContent =
-          "Visão completa das mensagens e confirmações de leitura.";
+        viewSubtitle.textContent = "Visão completa das mensagens, confirmações e tentativas.";
       } else {
         viewTitle.textContent = "Painel do Sócio";
-        viewSubtitle.textContent =
-          "Crie mensagens, acompanhe seus recados e confirme o que foi lido. Confirmação depende do IP detectado (prazo: 24h).";
+        viewSubtitle.textContent = "Confirmação com IP e prazo de 24 horas (com contagem regressiva).";
       }
 
       await fetchIP();
       await refreshAndRender();
+      startCountdownTicker(); // atualiza só a contagem, sem bater no Supabase
     });
 
     btnLogout.addEventListener("click", () => {
       currentUser = null;
       currentRole = null;
+      stopCountdownTicker();
       loginCard.style.display = "block";
       mainArea.style.display = "none";
     });
 
-    // ------------------------
-    // CARGA DE DADOS DO SUPABASE
-    // ------------------------
+    // SUPABASE LOAD
     async function loadMessagesFromSupabase() {
-      // mensagens
       const { data: msgs, error: errMsgs } = await supabase
         .from("messages")
         .select("*")
@@ -497,32 +525,24 @@
         return;
       }
 
-      // confirmações
       const { data: confs, error: errConfs } = await supabase
         .from("message_confirmations")
         .select("*");
-      if (errConfs) {
-        console.error("Erro ao carregar confirmações:", errConfs);
-      }
+      if (errConfs) console.error("Erro ao carregar confirmações:", errConfs);
 
-      // tentativas
       const { data: atts, error: errAtts } = await supabase
         .from("message_attempts")
         .select("*");
-      if (errAtts) {
-        console.error("Erro ao carregar tentativas:", errAtts);
-      }
+      if (errAtts) console.error("Erro ao carregar tentativas:", errAtts);
 
       const confsByMsg = {};
       (confs || []).forEach((row) => {
-        if (!confsByMsg[row.message_id]) confsByMsg[row.message_id] = [];
-        confsByMsg[row.message_id].push(row);
+        (confsByMsg[row.message_id] ||= []).push(row);
       });
 
       const attsByMsg = {};
       (atts || []).forEach((row) => {
-        if (!attsByMsg[row.message_id]) attsByMsg[row.message_id] = [];
-        attsByMsg[row.message_id].push(row);
+        (attsByMsg[row.message_id] ||= []).push(row);
       });
 
       messages = (msgs || []).map((m) => {
@@ -537,20 +557,14 @@
           attempts: [],
         };
 
-        // confirmações default: outros sócios
         USERS.forEach((u) => {
           if (u !== obj.autor) obj.confirmations[u] = null;
         });
 
-        // aplicar confirmações
         (confsByMsg[m.id] || []).forEach((c) => {
-          obj.confirmations[c.user_name] = {
-            time: c.confirmed_at,
-            ip: c.ip,
-          };
+          obj.confirmations[c.user_name] = { time: c.confirmed_at, ip: c.ip };
         });
 
-        // aplicar tentativas
         obj.attempts = (attsByMsg[m.id] || []).map((a) => ({
           user: a.attempted_by,
           ip: a.ip,
@@ -567,21 +581,13 @@
       renderView();
     }
 
-    // ------------------------
-    // CRIAÇÃO DE MENSAGEM
-    // ------------------------
+    // CRIAR MENSAGEM
     btnSalvarMensagem.addEventListener("click", async () => {
       const titulo = msgTituloInput.value.trim();
       const texto = msgTextoInput.value.trim();
 
-      if (!titulo) {
-        alert("Informe um título para a mensagem.");
-        return;
-      }
-      if (!texto) {
-        alert("Informe o conteúdo da mensagem.");
-        return;
-      }
+      if (!titulo) return alert("Informe um título para a mensagem.");
+      if (!texto) return alert("Informe o conteúdo da mensagem.");
 
       const { error } = await supabase.from("messages").insert({
         title: titulo,
@@ -591,21 +597,18 @@
 
       if (error) {
         console.error("Erro ao salvar mensagem:", error);
-        alert("Erro ao salvar mensagem.");
-        return;
+        return alert("Erro ao salvar mensagem.");
       }
 
       msgTituloInput.value = "";
       msgTextoInput.value = "";
       creatorFeedback.textContent = "Mensagem criada e registrada com sucesso.";
-      setTimeout(() => (creatorFeedback.textContent = ""), 3000);
+      setTimeout(() => (creatorFeedback.textContent = ""), 2500);
 
       await refreshAndRender();
     });
 
-    // ------------------------
-    // VISÃO PRINCIPAL
-    // ------------------------
+    // VIEW
     function renderView() {
       creatorArea.style.display = currentUser ? "block" : "none";
 
@@ -620,31 +623,20 @@
       }
     }
 
-    // ------------------------
-    // VISÃO SÓCIOS
-    // ------------------------
+    // SÓCIOS
     function renderSociosView() {
-      // minhas mensagens
-      const minhas = messages.filter(
-        (m) => m.autor === currentUser && !m.deletedByAuthor
-      );
+      const minhas = messages.filter((m) => m.autor === currentUser && !m.deletedByAuthor);
 
       if (minhas.length === 0) {
-        listaMinhasMensagens.innerHTML =
-          '<p class="no-data">Você ainda não criou nenhuma mensagem.</p>';
+        listaMinhasMensagens.innerHTML = '<p class="no-data">Você ainda não criou nenhuma mensagem.</p>';
       } else {
-        let html =
-          '<table class="table"><thead><tr>' +
-          "<th>Título</th>" +
-          "<th>Criada em</th>" +
-          "<th>Confirmações</th>" +
-          "<th>Ações</th>" +
+        let html = '<div class="table-wrap"><table class="table"><thead><tr>' +
+          "<th>Título</th><th>Criada em</th><th>Confirmações</th><th>Ações</th>" +
           "</tr></thead><tbody>";
+
         minhas.forEach((m) => {
           const totalRecebedores = Object.keys(m.confirmations || {}).length;
-          const totalConfirmadas = Object.values(m.confirmations || {}).filter(
-            (v) => v !== null
-          ).length;
+          const totalConfirmadas = Object.values(m.confirmations || {}).filter((v) => v !== null).length;
 
           html += `<tr>
             <td>
@@ -662,11 +654,11 @@
             </td>
           </tr>`;
         });
-        html += "</tbody></table>";
+
+        html += "</tbody></table></div>";
         listaMinhasMensagens.innerHTML = html;
       }
 
-      // mensagens para confirmar
       const paraConfirmar = messages.filter((m) => {
         if (m.deletedByAuthor) return false;
         if (m.autor === currentUser) return false;
@@ -675,24 +667,17 @@
       });
 
       if (paraConfirmar.length === 0) {
-        listaParaConfirmar.innerHTML =
-          '<p class="no-data">Não há mensagens pendentes para você confirmar.</p>';
+        listaParaConfirmar.innerHTML = '<p class="no-data">Não há mensagens pendentes para você confirmar.</p>';
       } else {
-        let html =
-          '<table class="table"><thead><tr>' +
-          "<th>Título</th>" +
-          "<th>Autor</th>" +
-          "<th>Conteúdo</th>" +
-          "<th>Status</th>" +
-          "<th>Ação</th>" +
+        let html = '<div class="table-wrap"><table class="table"><thead><tr>' +
+          "<th>Título</th><th>Autor</th><th>Conteúdo</th><th>Status</th><th>Ação</th>" +
           "</tr></thead><tbody>";
 
         paraConfirmar.forEach((m) => {
           const status = m.confirmations[currentUser];
           const jaConfirmou = !!status;
           const expirado = isExpired(m.createdAt);
-          const remainingText =
-            !jaConfirmou && !expirado ? formatRemainingText(m.createdAt) : null;
+          const remainingText = (!jaConfirmou && !expirado) ? formatRemainingText(m.createdAt) : null;
 
           html += `<tr>
             <td>${m.titulo}</td>
@@ -701,51 +686,47 @@
             <td>
               ${
                 jaConfirmou
-                  ? `<span class="badge badge-success">Confirmado em ${formatDateTime(
-                      status.time
-                    )}</span>`
+                  ? `<span class="badge badge-success">Confirmado em ${formatDateTime(status.time)}</span>`
                   : expirado
-                  ? '<span class="badge badge-danger">Prazo expirado (24h)</span>'
-                  : `<span class="badge badge-info">Pendente</span>`
+                    ? `<span class="badge badge-danger">Prazo expirado (24h)</span>`
+                    : `<span class="badge badge-info">Pendente</span>`
               }
               ${
                 remainingText
-                  ? `<div class="muted">${remainingText}</div>`
+                  ? `<div class="muted countdown" data-created-at="${m.createdAt}" data-msg-id="${m.id}">${remainingText}</div>`
                   : ""
               }
             </td>
             <td>
               ${
                 jaConfirmou
-                  ? '<span class="muted">Nada a fazer</span>'
+                  ? `<span class="muted">Nada a fazer</span>`
                   : expirado
-                  ? '<span class="muted">Prazo encerrado</span>'
-                  : `<button class="btn-sm" onclick="confirmarLeitura('${m.id}')">Confirmar leitura</button>`
+                    ? `<span class="muted">Prazo encerrado</span>`
+                    : `<button class="btn-sm" onclick="confirmarLeitura('${m.id}')">Confirmar leitura</button>`
               }
             </td>
           </tr>`;
         });
 
-        html += "</tbody></table>";
+        html += "</tbody></table></div>";
         listaParaConfirmar.innerHTML = html;
       }
     }
 
-    // Editar mensagem
     window.editarMensagem = async function (id) {
       const msg = messages.find((m) => m.id === id);
       if (!msg) return;
-      if (msg.autor !== currentUser) {
-        alert("Você só pode editar mensagens criadas por você.");
-        return;
-      }
+      if (msg.autor !== currentUser) return alert("Você só pode editar mensagens criadas por você.");
+
       const novoTitulo = prompt("Edite o título:", msg.titulo);
       if (novoTitulo === null) return;
+
       const novoTexto = prompt("Edite o texto:", msg.texto);
       if (novoTexto === null) return;
 
-      const titulo = novoTitulo.trim() || msg.titulo;
-      const texto = novoTexto.trim() || msg.texto;
+      const titulo = (novoTitulo.trim() || msg.titulo);
+      const texto = (novoTexto.trim() || msg.texto);
 
       const { error } = await supabase
         .from("messages")
@@ -755,27 +736,18 @@
 
       if (error) {
         console.error("Erro ao editar mensagem:", error);
-        alert("Erro ao editar mensagem.");
-        return;
+        return alert("Erro ao editar mensagem.");
       }
 
       await refreshAndRender();
     };
 
-    // Excluir (marca como excluída)
     window.excluirMensagem = async function (id) {
       const msg = messages.find((m) => m.id === id);
       if (!msg) return;
-      if (msg.autor !== currentUser) {
-        alert("Você só pode excluir mensagens criadas por você.");
-        return;
-      }
-      if (
-        !confirm(
-          "Tem certeza que deseja excluir esta mensagem da sua visão? O administrador continuará vendo o histórico."
-        )
-      )
-        return;
+      if (msg.autor !== currentUser) return alert("Você só pode excluir mensagens criadas por você.");
+
+      if (!confirm("Deseja excluir esta mensagem da sua visão? O administrador manterá o histórico.")) return;
 
       const { error } = await supabase
         .from("messages")
@@ -785,44 +757,29 @@
 
       if (error) {
         console.error("Erro ao excluir mensagem:", error);
-        alert("Erro ao excluir mensagem.");
-        return;
+        return alert("Erro ao excluir mensagem.");
       }
 
       await refreshAndRender();
     };
 
-    // Copiar link simbólico
     window.copyMessageLink = function (id) {
-      const fakeUrl =
-        window.location.origin + window.location.pathname + "?mensagem=" + id;
+      const fakeUrl = window.location.origin + window.location.pathname + "?mensagem=" + id;
       copyToClipboard(fakeUrl);
     };
 
-    // Confirmar leitura com Supabase + log de tentativa + prazo 24h
     window.confirmarLeitura = async function (id) {
       if (!currentIP) {
-        alert(
-          "Não foi possível identificar o IP do dispositivo. Verifique sua conexão e recarregue a página."
-        );
-        return;
+        return alert("Não foi possível identificar o IP do dispositivo. Recarregue a página e tente novamente.");
       }
 
       const msg = messages.find((m) => m.id === id);
-      if (!msg) {
-        alert("Mensagem não encontrada.");
-        return;
-      }
+      if (!msg) return alert("Mensagem não encontrada.");
 
-      // checar prazo de 24h antes de tudo
       if (isExpired(msg.createdAt)) {
-        alert(
-          "O prazo de 24 horas para reconhecer esta mensagem já foi encerrado."
-        );
-        return;
+        return alert("O prazo de 24 horas para reconhecer esta mensagem já foi encerrado.");
       }
 
-      // Buscar confirmações dessa mensagem direto no Supabase
       const { data: confRows, error } = await supabase
         .from("message_confirmations")
         .select("*")
@@ -830,103 +787,65 @@
 
       if (error) {
         console.error("Erro ao buscar confirmações:", error);
-        alert("Erro ao verificar confirmações.");
-        return;
+        return alert("Erro ao verificar confirmações.");
       }
 
       const confs = confRows || [];
 
-      // Já confirmou com este usuário?
       const jaConfirmou = confs.find((c) => c.user_name === currentUser);
-      if (jaConfirmou) {
-        alert("Você já confirmou esta mensagem.");
-        return;
-      }
+      if (jaConfirmou) return alert("Você já confirmou esta mensagem.");
 
-      // Verificar se o IP já foi usado por outro usuário
-      const outroComMesmoIP = confs.find(
-        (c) => c.ip === currentIP && c.user_name !== currentUser
-      );
+      const outroComMesmoIP = confs.find((c) => c.ip === currentIP && c.user_name !== currentUser);
       if (outroComMesmoIP) {
-        // registrar tentativa bloqueada
         const reason = `IP já utilizado pelo usuário ${outroComMesmoIP.user_name} nesta mensagem`;
-        const { error: attErr } = await supabase
-          .from("message_attempts")
-          .insert({
-            message_id: id,
-            attempted_by: currentUser,
-            ip: currentIP,
-            reason,
-          });
-        if (attErr) {
-          console.error("Erro ao registrar tentativa:", attErr);
-        }
+        const { error: attErr } = await supabase.from("message_attempts").insert({
+          message_id: id,
+          attempted_by: currentUser,
+          ip: currentIP,
+          reason,
+        });
+        if (attErr) console.error("Erro ao registrar tentativa:", attErr);
 
-        alert(
-          "Este IP já foi utilizado para confirmar esta mensagem em outro usuário. Não é possível confirmar novamente."
-        );
         await refreshAndRender();
-        return;
+        return alert("Este IP já foi utilizado para confirmar esta mensagem em outro usuário. Não é possível confirmar novamente.");
       }
 
-      // registrar confirmação
-      const { error: confErr } = await supabase
-        .from("message_confirmations")
-        .insert({
-          message_id: id,
-          user_name: currentUser,
-          ip: currentIP,
-        });
+      const { error: confErr } = await supabase.from("message_confirmations").insert({
+        message_id: id,
+        user_name: currentUser,
+        ip: currentIP,
+      });
 
       if (confErr) {
         console.error("Erro ao registrar confirmação:", confErr);
-        alert("Erro ao registrar confirmação.");
-        return;
+        return alert("Erro ao registrar confirmação.");
       }
 
       alert("Leitura confirmada com sucesso.");
       await refreshAndRender();
     };
 
-    // ------------------------
-    // VISÃO ADMIN
-    // ------------------------
+    // ADMIN
     function renderAdminView() {
       if (messages.length === 0) {
-        adminListaMensagens.innerHTML =
-          '<p class="no-data">Não há mensagens registradas ainda.</p>';
-        adminDetalhesMensagem.innerHTML =
-          '<p class="no-data">Selecione uma mensagem para ver detalhes.</p>';
+        adminListaMensagens.innerHTML = '<p class="no-data">Não há mensagens registradas ainda.</p>';
+        adminDetalhesMensagem.innerHTML = '<p class="no-data">Selecione uma mensagem para ver detalhes.</p>';
         return;
       }
 
-      let html =
-        '<table class="table"><thead><tr>' +
-        "<th>Título</th>" +
-        "<th>Autor</th>" +
-        "<th>Data</th>" +
-        "<th>Status</th>" +
-        "<th>Confirmações</th>" +
-        "<th>Ver</th>" +
+      let html = '<div class="table-wrap"><table class="table"><thead><tr>' +
+        "<th>Título</th><th>Autor</th><th>Data</th><th>Status</th><th>Confirmações</th><th>Ver</th>" +
         "</tr></thead><tbody>";
 
       messages.forEach((m) => {
         const totalRecebedores = Object.keys(m.confirmations || {}).length;
-        const totalConfirmadas = Object.values(m.confirmations || {}).filter(
-          (v) => v !== null
-        ).length;
+        const totalConfirmadas = Object.values(m.confirmations || {}).filter((v) => v !== null).length;
         const expirado = isExpired(m.createdAt);
-        const remainingText =
-          !expirado ? formatRemainingText(m.createdAt) : null;
+        const remainingText = (!m.deletedByAuthor && !expirado) ? formatRemainingText(m.createdAt) : null;
 
-        let statusBadge;
-        if (m.deletedByAuthor) {
-          statusBadge = '<span class="badge badge-danger">Excluída pelo autor</span>';
-        } else if (expirado) {
-          statusBadge = '<span class="badge badge-danger">Prazo expirado (24h)</span>';
-        } else {
-          statusBadge = '<span class="badge badge-info">Ativa</span>';
-        }
+        let statusBadge = '<span class="badge badge-info">Ativa</span>';
+        if (m.deletedByAuthor) statusBadge = '<span class="badge badge-danger">Excluída pelo autor</span>';
+        else if (expirado) statusBadge = '<span class="badge badge-danger">Prazo expirado (24h)</span>';
 
         html += `<tr>
           <td>${m.titulo}</td>
@@ -934,22 +853,14 @@
           <td>${formatDateTime(m.createdAt)}</td>
           <td>
             ${statusBadge}
-            ${
-              !m.deletedByAuthor && remainingText && !expirado
-                ? `<div class="muted">${remainingText}</div>`
-                : ""
-            }
+            ${remainingText ? `<div class="muted countdown" data-created-at="${m.createdAt}" data-msg-id="${m.id}">${remainingText}</div>` : ""}
           </td>
           <td><span class="tag">${totalConfirmadas} / ${totalRecebedores}</span></td>
-          <td>
-            <button class="btn-sm btn-outline" onclick="verDetalhesAdmin('${m.id}')">
-              Detalhes
-            </button>
-          </td>
+          <td><button class="btn-sm btn-outline" onclick="verDetalhesAdmin('${m.id}')">Detalhes</button></td>
         </tr>`;
       });
 
-      html += "</tbody></table>";
+      html += "</tbody></table></div>";
       adminListaMensagens.innerHTML = html;
     }
 
@@ -958,88 +869,56 @@
       if (!msg) return;
 
       const expirado = isExpired(msg.createdAt);
-      const remainingText = !expirado ? formatRemainingText(msg.createdAt) : null;
+      const remainingText = (!msg.deletedByAuthor && !expirado) ? formatRemainingText(msg.createdAt) : null;
 
-      let statusTexto;
-      if (msg.deletedByAuthor) {
-        statusTexto = "Excluída pelo autor (mantida para registro)";
-      } else if (expirado) {
-        statusTexto = "Prazo expirado (24h) para reconhecimento";
-      } else {
-        statusTexto = "Ativa";
-      }
+      let statusTexto = "Ativa";
+      if (msg.deletedByAuthor) statusTexto = "Excluída pelo autor (mantida para registro)";
+      else if (expirado) statusTexto = "Prazo expirado (24h) para reconhecimento";
 
-      let html = "";
-      html += `<div class="stack">
+      let html = `<div class="stack">
         <div>
           <div class="message-title">${msg.titulo}</div>
           <div class="muted">Autor: ${msg.autor}</div>
           <div class="muted">Criada em: ${formatDateTime(msg.createdAt)}</div>
           <div class="muted">Status: ${statusTexto}</div>
-          ${
-            !msg.deletedByAuthor && remainingText && !expirado
-              ? `<div class="muted">${remainingText}</div>`
-              : ""
-          }
+          ${remainingText ? `<div class="muted countdown" data-created-at="${msg.createdAt}" data-msg-id="${msg.id}">${remainingText}</div>` : ""}
         </div>
+
         <div>
           <h3>Conteúdo</h3>
           <div class="message-text">${msg.texto}</div>
         </div>
+
         <div>
-          <h3>Confirmações de leitura (por usuário e IP)</h3>
-      `;
+          <h3>Confirmações de leitura (por usuário e IP)</h3>`;
 
       const confs = msg.confirmations || {};
-      if (Object.keys(confs).length === 0) {
-        html +=
-          '<p class="no-data">Não há configuração de confirmações para esta mensagem.</p>';
-      } else {
-        html +=
-          '<table class="table"><thead><tr>' +
-          "<th>Sócio</th>" +
-          "<th>Status</th>" +
-          "<th>Data/hora</th>" +
-          "<th>IP</th>" +
-          "</tr></thead><tbody>";
+      html += `<div class="table-wrap"><table class="table"><thead><tr>
+        <th>Sócio</th><th>Status</th><th>Data/hora</th><th>IP</th>
+      </tr></thead><tbody>`;
 
-        Object.keys(confs).forEach((user) => {
-          const info = confs[user];
-          html += `<tr>
-            <td>${user}</td>
-            <td>${
-              info
-                ? '<span class="badge badge-success">Confirmado</span>'
-                : '<span class="badge badge-info">Pendente</span>'
-            }</td>
-            <td>${info ? formatDateTime(info.time) : "-"}</td>
-            <td>${info ? info.ip : "-"}</td>
-          </tr>`;
-        });
+      Object.keys(confs).forEach((user) => {
+        const info = confs[user];
+        html += `<tr>
+          <td>${user}</td>
+          <td>${info ? '<span class="badge badge-success">Confirmado</span>' : '<span class="badge badge-info">Pendente</span>'}</td>
+          <td>${info ? formatDateTime(info.time) : "-"}</td>
+          <td>${info ? info.ip : "-"}</td>
+        </tr>`;
+      });
 
-        html += "</tbody></table>";
-      }
+      html += `</tbody></table></div></div>`;
 
-      html += "</div>";
-
-      // Tentativas bloqueadas
       html += `<div>
-        <h3>Tentativas de confirmação bloqueadas</h3>
-      `;
+        <h3>Tentativas de confirmação bloqueadas</h3>`;
 
       const attempts = Array.isArray(msg.attempts) ? msg.attempts : [];
       if (attempts.length === 0) {
-        html +=
-          '<p class="no-data">Não foram registradas tentativas bloqueadas para esta mensagem.</p>';
+        html += `<p class="no-data">Não foram registradas tentativas bloqueadas para esta mensagem.</p>`;
       } else {
-        html +=
-          '<table class="table"><thead><tr>' +
-          "<th>Usuário que tentou</th>" +
-          "<th>Data/hora</th>" +
-          "<th>IP</th>" +
-          "<th>Motivo</th>" +
-          "</tr></thead><tbody>";
-
+        html += `<div class="table-wrap"><table class="table"><thead><tr>
+          <th>Usuário que tentou</th><th>Data/hora</th><th>IP</th><th>Motivo</th>
+        </tr></thead><tbody>`;
         attempts.forEach((att) => {
           html += `<tr>
             <td>${att.user}</td>
@@ -1048,19 +927,38 @@
             <td>${att.reason}</td>
           </tr>`;
         });
-
-        html += "</tbody></table>";
+        html += `</tbody></table></div>`;
       }
 
-      html += "</div></div>";
+      html += `</div></div>`;
       adminDetalhesMensagem.innerHTML = html;
     };
 
-    // ------------------------
-    // INICIALIZAÇÃO
-    // ------------------------
-    // dados são carregados após o login
+    // TICKER (atualiza somente os textos de contagem regressiva, sem recarregar do Supabase)
+    let ticker = null;
+
+    function updateCountdownTexts() {
+      document.querySelectorAll(".countdown").forEach((el) => {
+        const createdAt = el.getAttribute("data-created-at");
+        const text = formatRemainingText(createdAt);
+        if (!text) {
+          el.textContent = "Prazo encerrado";
+        } else {
+          el.textContent = text;
+        }
+      });
+    }
+
+    function startCountdownTicker() {
+      stopCountdownTicker();
+      updateCountdownTexts();
+      ticker = setInterval(updateCountdownTexts, 30 * 1000); // a cada 30s
+    }
+
+    function stopCountdownTicker() {
+      if (ticker) clearInterval(ticker);
+      ticker = null;
+    }
   </script>
 </body>
 </html>
-
